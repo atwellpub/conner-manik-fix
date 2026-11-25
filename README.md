@@ -201,6 +201,11 @@ or double-click `build.cmd`. Nothing needs to be installed first. The script:
 
 Use `-SkipMsi` to build only the exe.
 
+The project folder can be on a WSL drive (for example `X:\home\...` or `\\wsl.localhost\...`). Windows
+treats that as a network drive, where the installer tools and Windows' own `.ini` functions do not
+work, so the MSI step and the tests do that part of their work in the Windows temp folder and clean
+up after themselves.
+
 To release a new version, change `APP_VERSION` and the `;@Ahk2Exe-SetVersion` line in
 `src\MANIK-Keyboard-Fix.ahk` together. The build stops if they disagree. The installer replaces an
 installed copy only when the version number goes up.
@@ -213,6 +218,7 @@ installed copy only when the version number goes up.
 | `installer\MANIK-Keyboard-Fix.wxs` | The MSI definition |
 | `assets\` | The two icons |
 | `tools\make-icons.ps1` | Redraws the icons (only needed to change how they look) |
+| `tools\build-msi.ps1` | Builds one MSI. Used by the build and by the installer test |
 | `build.ps1`, `build.cmd` | The build |
 | `tests\` | Automated tests, see [TESTING.md](TESTING.md) |
 | `dist\` | The built exe and MSI |

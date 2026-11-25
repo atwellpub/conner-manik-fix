@@ -8,3 +8,7 @@
 
 # Test run output
 tests/out/
+
+# Install video renderer: its Node packages and scratch frames
+tools/video/node_modules/
+tools/video/out/

@@ -41,7 +41,14 @@ if (-not (Test-Path -LiteralPath $ahk)) { throw 'AutoHotkey was not found in .bu
 if (-not (Test-Path -LiteralPath $Exe)) { throw "$Exe was not found. Run build.ps1 first." }
 
 for ($attempt = 1; $attempt -le $MaxAttempts; $attempt++) {
-    $process = Start-Process -FilePath $ahk -ArgumentList @('/ErrorStdOut', "`"$script`"", "`"$Exe`"", $MaxWaitSeconds) -PassThru
+    # Started directly rather than through the Windows shell. The shell can stop
+    # to ask "do you want to run this file?" when the project is on a network
+    # drive, which a WSL folder is, and nobody would be there to answer.
+    $info = New-Object System.Diagnostics.ProcessStartInfo
+    $info.FileName = $ahk
+    $info.Arguments = "/ErrorStdOut `"$script`" `"$Exe`" $MaxWaitSeconds"
+    $info.UseShellExecute = $false
+    $process = [System.Diagnostics.Process]::Start($info)
     if (-not $process.WaitForExit(($MaxWaitSeconds + 180) * 1000)) {
         & taskkill.exe /PID $process.Id /T /F 2>&1 | Out-Null
         Get-Process -Name 'MANIK-Keyboard-Fix' -ErrorAction SilentlyContinue | Stop-Process -Force

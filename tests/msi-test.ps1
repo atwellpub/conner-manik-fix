@@ -21,6 +21,10 @@
     It refuses to run if MANIK Keyboard Fix is already installed or has settings
     on this account, so it can never remove a real install.
 
+    The MSIs are copied to the Windows temp folder and installed from there.
+    Windows Installer cannot always read a package from a network location,
+    and a WSL folder seen from Windows is one.
+
     Results: tests\out\msi-results.txt
 #>
 
@@ -93,9 +97,6 @@ function Wait-Until([scriptblock]$condition, [int]$seconds = 8) {
 # --- Preconditions -----------------------------------------------------------
 
 if (-not (Test-Path -LiteralPath $msi)) { throw "$msi was not found. Run build.ps1 first." }
-$candle = Join-Path $root '.build-tools\wix\candle.exe'
-$light  = Join-Path $root '.build-tools\wix\light.exe'
-if (-not (Test-Path -LiteralPath $candle)) { throw 'WiX was not found in .build-tools. Run build.ps1 first.' }
 
 $existing = @()
 if (Test-Path -LiteralPath $installDir) { $existing += $installDir }
@@ -116,18 +117,20 @@ $sourceText = Get-Content -LiteralPath (Join-Path $root 'src\MANIK-Keyboard-Fix.
 if ($sourceText -notmatch '(?m)^APP_VERSION\s*:=\s*"(\d+)\.(\d+)\.(\d+)"') { throw 'APP_VERSION was not found in the source.' }
 $version    = '{0}.{1}.{2}' -f $Matches[1], $Matches[2], $Matches[3]
 $newVersion = '{0}.{1}.{2}' -f $Matches[1], $Matches[2], ([int]$Matches[3] + 1)
-$newMsi     = Join-Path $outDir "upgrade-$newVersion.msi"
-$wixobj     = Join-Path $outDir 'upgrade.wixobj'
-& $candle -nologo -arch x64 "-dVersion=$newVersion" "-dDistDir=$(Join-Path $root 'dist')" "-dAssetsDir=$(Join-Path $root 'assets')" -out $wixobj (Join-Path $root 'installer\MANIK-Keyboard-Fix.wxs') | Out-Null
-if ($LASTEXITCODE -ne 0) { throw 'candle.exe failed while building the upgrade MSI.' }
-& $light -nologo -spdb -sw1076 -sice:ICE91 -out $newMsi $wixobj | Out-Null
-if ($LASTEXITCODE -ne 0) { throw 'light.exe failed while building the upgrade MSI.' }
+
+# Everything Windows Installer touches lives in a local working folder.
+$work   = Join-Path ([System.IO.Path]::GetTempPath()) ('manik-keyboard-fix-msitest-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+New-Item -ItemType Directory -Force -Path $work | Out-Null
+$oldMsi = Join-Path $work 'MANIK-Keyboard-Fix.msi'
+$newMsi = Join-Path $work "MANIK-Keyboard-Fix-$newVersion.msi"
+Copy-Item -LiteralPath $msi -Destination $oldMsi
+& (Join-Path $root 'tools\build-msi.ps1') -Version $newVersion -Output $newMsi
 
 try {
     # --- 1. Install ----------------------------------------------------------
     Write-Result ''
     Write-Result "1. Install version $version (progress window only, as a double-click does)"
-    $code = Invoke-Msi @('/i', "`"$msi`"", '/qb', '/l*v', "`"$(Join-Path $outDir 'msi-install.log')`"")
+    $code = Invoke-Msi @('/i', "`"$oldMsi`"", '/qb', '/l*v', "`"$(Join-Path $work 'msi-install.log')`"")
     Check 'the installer finishes without error and without asking for an administrator' ($code -eq 0) "exit code $code"
     Check 'the exe is installed under the user profile' (Test-Path -LiteralPath $installedExe) $installedExe
     if (Test-Path -LiteralPath $installedExe) {
@@ -156,7 +159,7 @@ try {
     # --- 3. Upgrade ----------------------------------------------------------
     Write-Result ''
     Write-Result "2. Upgrade to version $newVersion while the app is running"
-    $code = Invoke-Msi @('/i', "`"$newMsi`"", '/qn', '/l*v', "`"$(Join-Path $outDir 'msi-upgrade.log')`"")
+    $code = Invoke-Msi @('/i', "`"$newMsi`"", '/qn', '/l*v', "`"$(Join-Path $work 'msi-upgrade.log')`"")
     Check 'the upgrade finishes without error and without needing a restart' ($code -eq 0) "exit code $code"
     Check 'the running app was asked to exit first' ((Get-AppProcesses).Count -eq 0) "$((Get-AppProcesses).Count) still running"
     $entries = @(Get-InstalledEntries)
@@ -174,7 +177,7 @@ try {
     Write-Result '3. Uninstall while the app is running'
     Start-Process -FilePath $installedExe -ArgumentList '/tray'
     [void](Wait-Until { (Get-AppProcesses).Count -eq 1 })
-    $code = Invoke-Msi @('/x', "`"$newMsi`"", '/qn', '/l*v', "`"$(Join-Path $outDir 'msi-uninstall.log')`"")
+    $code = Invoke-Msi @('/x', "`"$newMsi`"", '/qn', '/l*v', "`"$(Join-Path $work 'msi-uninstall.log')`"")
     Check 'the uninstall finishes without error and without needing a restart' ($code -eq 0) "exit code $code"
     Check 'the running app was asked to exit first' ((Get-AppProcesses).Count -eq 0) "$((Get-AppProcesses).Count) still running"
     Check 'the install folder is gone' (-not (Test-Path -LiteralPath $installDir))
@@ -197,7 +200,8 @@ finally {
     if ((Test-Path -LiteralPath $settingsDir) -and -not (Get-ChildItem -LiteralPath $settingsDir -Force)) {
         Remove-Item -LiteralPath $settingsDir -Force
     }
-    Remove-Item -LiteralPath $newMsi, $wixobj -Force -ErrorAction SilentlyContinue
+    Get-ChildItem -LiteralPath $work -Filter '*.log' -ErrorAction SilentlyContinue | Copy-Item -Destination $outDir -Force
+    Remove-Item -LiteralPath $work -Recurse -Force -ErrorAction SilentlyContinue
 }
 
 Write-Result ''

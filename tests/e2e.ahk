@@ -50,7 +50,10 @@ Main() {
     SplitPath(T.exe, &name)
     T.exeName := name
     DirCreate(T.outDir)
-    T.ini := T.outDir "\e2e-settings.ini"
+    ; The scratch settings file goes in the Windows temp folder. Windows' .ini
+    ; functions do not work on a network drive, and this project may be on one
+    ; (a WSL folder seen from Windows is a network drive).
+    T.ini := A_Temp "\manik-keyboard-fix-e2e-" A_TickCount ".ini"
     T.resultsFile := T.outDir "\e2e-results.txt"
     try FileDelete(T.resultsFile)
 

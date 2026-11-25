@@ -30,7 +30,6 @@ $ProgressPreference = 'SilentlyContinue'
 $root    = $PSScriptRoot
 $tools   = Join-Path $root '.build-tools'
 $source  = Join-Path $root 'src\MANIK-Keyboard-Fix.ahk'
-$wxs     = Join-Path $root 'installer\MANIK-Keyboard-Fix.wxs'
 $distDir = Join-Path $root 'dist'
 $exeOut  = Join-Path $distDir 'MANIK-Keyboard-Fix.exe'
 $msiOut  = Join-Path $distDir 'MANIK-Keyboard-Fix.msi'
@@ -200,25 +199,8 @@ if ($fileVersion -notlike "$version*") {
 
 if (-not $SkipMsi) {
     Write-Step 'Building the MSI'
-    $candle = Join-Path $tools 'wix\candle.exe'
-    $light  = Join-Path $tools 'wix\light.exe'
-    $objDir = Join-Path $tools 'obj'
-    New-Item -ItemType Directory -Force -Path $objDir | Out-Null
-    $wixobj = Join-Path $objDir 'MANIK-Keyboard-Fix.wixobj'
     if (Test-Path -LiteralPath $msiOut) { Remove-Item -LiteralPath $msiOut -Force }
-
-    $step = Invoke-Tool $candle @('-nologo', '-arch', 'x64', "-dVersion=$version", "-dDistDir=$distDir",
-        "-dAssetsDir=$(Join-Path $root 'assets')", '-out', $wixobj, $wxs) 120
-    if ($step.Output) { Write-Host $step.Output }
-    if ($step.ExitCode -ne 0) { throw "candle.exe failed with exit code $($step.ExitCode)." }
-
-    # ICE91 only notes that this is a per-user install, which is the intent.
-    # ICE61 only notes that a same-version rebuild is allowed to replace itself.
-    $step = Invoke-Tool $light @('-nologo', '-spdb', '-sw1076', '-sice:ICE91', '-out', $msiOut, $wixobj) 300
-    if ($step.Output) { Write-Host $step.Output }
-    if ($step.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $msiOut)) {
-        throw "light.exe failed with exit code $($step.ExitCode)."
-    }
+    & (Join-Path $root 'tools\build-msi.ps1') -Version $version -Output $msiOut
 }
 
 # --- Done --------------------------------------------------------------------

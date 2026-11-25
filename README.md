@@ -13,13 +13,15 @@ This is an unofficial fix. It is not made by, or affiliated with, the keyboard's
 
 ## Download
 
-**[Download the installer: MANIK-Keyboard-Fix.msi](https://github.com/atwellpub/conner-manik-fix/releases/latest/download/MANIK-Keyboard-Fix.msi)**
+**[Download the installer: MANIK-Keyboard-Fix.msi](https://github.com/atwellpub/manik-keyboard-fix/releases/latest/download/MANIK-Keyboard-Fix.msi)**
 
 That link always fetches the newest version. The
-[latest release](https://github.com/atwellpub/conner-manik-fix/releases/latest) page also has the
+[latest release](https://github.com/atwellpub/manik-keyboard-fix/releases/latest) page also has the
 standalone exe and the install video.
 
-New to it? The [one-minute walkthrough](#install) below shows every step.
+New to it? Watch the one-minute install walkthrough: it plays [further down this page](#install),
+and you can download it as a video,
+[install-guide.mp4](https://github.com/atwellpub/manik-keyboard-fix/releases/latest/download/install-guide.mp4).
 
 ## What it corrects
 
@@ -44,13 +46,13 @@ and combinations with Shift, Ctrl and Alt all carry through.
 ![Animated walkthrough: save the installer, double-click it, wait for the progress bar, tick the two Starting up boxes, click Enable Keyboard Fix, try the keys, then click Hide to Tray](docs/install-guide.gif)
 
 The same walkthrough as a video file, for sharing:
-[install-guide.mp4](https://github.com/atwellpub/conner-manik-fix/releases/latest/download/install-guide.mp4).
+[install-guide.mp4](https://github.com/atwellpub/manik-keyboard-fix/releases/latest/download/install-guide.mp4).
 
 There are two ways to get it onto a PC. Both end up running the same program.
 
 ### Option 1: the installer (recommended)
 
-1. [Download `MANIK-Keyboard-Fix.msi`](https://github.com/atwellpub/conner-manik-fix/releases/latest/download/MANIK-Keyboard-Fix.msi)
+1. [Download `MANIK-Keyboard-Fix.msi`](https://github.com/atwellpub/manik-keyboard-fix/releases/latest/download/MANIK-Keyboard-Fix.msi)
    onto the PC and double-click it.
 2. A short progress bar appears, then the app opens by itself.
 
@@ -63,7 +65,7 @@ account only.
 
 ### Option 2: the standalone exe
 
-[Download `MANIK-Keyboard-Fix.exe`](https://github.com/atwellpub/conner-manik-fix/releases/latest/download/MANIK-Keyboard-Fix.exe),
+[Download `MANIK-Keyboard-Fix.exe`](https://github.com/atwellpub/manik-keyboard-fix/releases/latest/download/MANIK-Keyboard-Fix.exe),
 put it anywhere (the Desktop is fine) and double-click it. There is nothing to install and nothing
 else is needed.
 
@@ -126,7 +128,7 @@ Because there is no window to look at inside a game, it answers with a sound: tw
 **"This installation package could not be opened."** The MSI is being opened from a network drive
 or a WSL folder (a path such as `X:\...` or `\\wsl.localhost\...`). Windows Installer cannot read a
 package from there. Copy the file to the Desktop or the Downloads folder and double-click that copy,
-or download it again from the [latest release](https://github.com/atwellpub/conner-manik-fix/releases/latest).
+or download it again from the [latest release](https://github.com/atwellpub/manik-keyboard-fix/releases/latest).
 
 **The keys are still wrong.** Open the window and check that the banner is green. If it says ON with
 "nothing ticked", tick a box under **Keys to fix**. Then try the keys in the **Keyboard test** area.

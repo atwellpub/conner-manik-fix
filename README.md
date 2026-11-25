@@ -19,7 +19,7 @@ That link always fetches the newest version. The
 [latest release](https://github.com/atwellpub/conner-manik-fix/releases/latest) page also has the
 standalone exe and the install video.
 
-New to it? [Watch the one-minute install video](docs/install-guide.mp4), or follow the steps below.
+New to it? The [one-minute walkthrough](#install) below shows every step.
 
 ## What it corrects
 
@@ -40,6 +40,11 @@ With the fix on, every key does what is printed on it. Held keys, key repeat, se
 and combinations with Shift, Ctrl and Alt all carry through.
 
 ## Install
+
+![Animated walkthrough: save the installer, double-click it, wait for the progress bar, tick the two Starting up boxes, click Enable Keyboard Fix, try the keys, then click Hide to Tray](docs/install-guide.gif)
+
+The same walkthrough as a video file, for sharing:
+[install-guide.mp4](https://github.com/atwellpub/conner-manik-fix/releases/latest/download/install-guide.mp4).
 
 There are two ways to get it onto a PC. Both end up running the same program.
 
@@ -243,7 +248,7 @@ download links at the top of this page keep working.
 | `build.ps1`, `build.cmd` | The build |
 | `tests\` | Automated tests, see [TESTING.md](TESTING.md) |
 | `dist\` | The built exe and MSI |
-| `docs\` | The screenshot used in this README, and the install video |
+| `docs\` | The screenshot used in this README, and the install walkthrough as a video and as an animation |
 
 ## Testing
 

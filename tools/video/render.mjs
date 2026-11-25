@@ -1,4 +1,9 @@
-// Renders docs/install-guide.mp4 from storyboard.html and the pictures in shots/.
+// Renders the install walkthrough from storyboard.html and the pictures in shots/:
+//
+//     docs/install-guide.mp4   the video, 1920x1080, for sharing
+//     docs/install-guide.gif   the same thing as a half-size animation, which is
+//                              what the README shows (GitHub will not play an MP4
+//                              that lives in a repository)
 //
 //     cd tools/video
 //     npm install          (once: fetches playwright-core, which drives Chrome)
@@ -15,6 +20,8 @@
 //
 //     node render.mjs --stills 2,10,26     writes single frames to out/ instead,
 //                                          for checking the layout quickly
+//     node render.mjs --gif                remakes only the animation, from the
+//                                          video that is already there
 
 import { chromium } from "playwright-core";
 import { spawn } from "node:child_process";
@@ -25,10 +32,29 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const output = join(here, "..", "..", "docs", "install-guide.mp4");
+const animation = join(here, "..", "..", "docs", "install-guide.gif");
 const FPS = 30;
 const WIDTH = 1280, HEIGHT = 720, SCALE = 1.5;      // drawn at 1280x720, saved at 1920x1080
 
 const args = process.argv.slice(2);
+
+// The animation is made from the finished video: 10 frames a second, 960 wide,
+// with its own 128-colour palette and no dithering, which keeps flat areas flat
+// and the file small.
+async function writeAnimation() {
+  const filter = "fps=10,scale=960:-1:flags=lanczos,split[a][b];"
+    + "[a]palettegen=stats_mode=diff:max_colors=128[p];[b][p]paletteuse=dither=none:diff_mode=rectangle";
+  const pass = spawn("ffmpeg", ["-y", "-loglevel", "error", "-i", output, "-vf", filter, "-loop", "0", animation], { stdio: "inherit" });
+  const [code] = await once(pass, "close");
+  if (code !== 0) throw new Error(`ffmpeg failed with exit code ${code} while writing the animation`);
+  console.log(`wrote ${animation}`);
+}
+
+if (args.includes("--gif")) {
+  if (!existsSync(output)) throw new Error("docs/install-guide.mp4 is missing. Run node render.mjs first.");
+  await writeAnimation();
+  process.exit(0);
+}
 const stillsAt = args.includes("--stills") ? args[args.indexOf("--stills") + 1].split(",").map(Number) : null;
 
 for (const name of ["installer-1", "installer-2", "app-off", "app-tick1", "app-tick2", "app-on", "app-test-w", "app-test-up", "icon-on"]) {
@@ -99,3 +125,4 @@ const [code] = await once(ffmpeg, "close");
 await browser.close();
 if (code !== 0) throw new Error(`ffmpeg failed with exit code ${code}`);
 console.log(`wrote ${output} (${frames} frames, ${duration} seconds)`);
+await writeAnimation();

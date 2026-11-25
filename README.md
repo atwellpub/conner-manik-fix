@@ -11,6 +11,16 @@ This is an unofficial fix. It is not made by, or affiliated with, the keyboard's
 
 ![The MANIK Keyboard Fix window with the fix turned on](docs/window-on.png)
 
+## Download
+
+**[Download the installer: MANIK-Keyboard-Fix.msi](https://github.com/atwellpub/conner-manik-fix/releases/latest/download/MANIK-Keyboard-Fix.msi)**
+
+That link always fetches the newest version. The
+[latest release](https://github.com/atwellpub/conner-manik-fix/releases/latest) page also has the
+standalone exe and the install video.
+
+New to it? [Watch the one-minute install video](docs/install-guide.mp4), or follow the steps below.
+
 ## What it corrects
 
 | The keyboard sends | The app turns it into |
@@ -35,7 +45,8 @@ There are two ways to get it onto a PC. Both end up running the same program.
 
 ### Option 1: the installer (recommended)
 
-1. Copy `dist\MANIK-Keyboard-Fix.msi` to the PC and double-click it.
+1. [Download `MANIK-Keyboard-Fix.msi`](https://github.com/atwellpub/conner-manik-fix/releases/latest/download/MANIK-Keyboard-Fix.msi)
+   onto the PC and double-click it.
 2. A short progress bar appears, then the app opens by itself.
 
 The installer puts the app in your own user profile, so it **does not ask for an administrator
@@ -47,8 +58,9 @@ account only.
 
 ### Option 2: the standalone exe
 
-Copy `dist\MANIK-Keyboard-Fix.exe` anywhere (the Desktop is fine) and double-click it. There is
-nothing to install and nothing else is needed.
+[Download `MANIK-Keyboard-Fix.exe`](https://github.com/atwellpub/conner-manik-fix/releases/latest/download/MANIK-Keyboard-Fix.exe),
+put it anywhere (the Desktop is fine) and double-click it. There is nothing to install and nothing
+else is needed.
 
 ### If Windows shows a blue "Windows protected your PC" box
 
@@ -208,7 +220,9 @@ up after themselves.
 
 To release a new version, change `APP_VERSION` and the `;@Ahk2Exe-SetVersion` line in
 `src\MANIK-Keyboard-Fix.ahk` together. The build stops if they disagree. The installer replaces an
-installed copy only when the version number goes up.
+installed copy only when the version number goes up. Build, run both tests, then publish a GitHub
+release with the exe and the MSI from `dist\` attached under the same file names, so that the
+download links at the top of this page keep working.
 
 ### Project layout
 
@@ -219,10 +233,11 @@ installed copy only when the version number goes up.
 | `assets\` | The two icons |
 | `tools\make-icons.ps1` | Redraws the icons (only needed to change how they look) |
 | `tools\build-msi.ps1` | Builds one MSI. Used by the build and by the installer test |
+| `tools\video\` | Captures and renders the install video (only needed to remake it) |
 | `build.ps1`, `build.cmd` | The build |
 | `tests\` | Automated tests, see [TESTING.md](TESTING.md) |
 | `dist\` | The built exe and MSI |
-| `docs\` | The screenshot used in this README |
+| `docs\` | The screenshot used in this README, and the install video |
 
 ## Testing
 

@@ -98,8 +98,8 @@ Write-Step 'Checking sources'
 # before it gets there.
 $lineCap = 900
 if (-not $SkipLineCap) {
-    $checked = Get-ChildItem -Path $root -Recurse -File -Include *.ahk, *.ps1, *.cmd, *.md, *.wxs |
-        Where-Object { $_.FullName -notmatch '\\(\.build-tools|\.git|\.wt|dist|tests\\out)\\' }
+    $checked = Get-ChildItem -Path $root -Recurse -File -Include *.ahk, *.ps1, *.cmd, *.md, *.wxs, *.html, *.mjs |
+        Where-Object { $_.FullName -notmatch '\\(\.build-tools|\.git|\.wt|dist|node_modules|tests\\out|tools\\video\\out)\\' }
     $tooLong = @()
     foreach ($file in $checked) {
         $lines = @(Get-Content -LiteralPath $file.FullName).Count

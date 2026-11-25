@@ -1,0 +1,32 @@
+﻿{
+  "width": 482,
+  "height": 673,
+  "controls": [
+    { "text": "Keyboard Fix is OFF", "class": "Static", "x": 41, "y": 74, "w": 400, "h": 48 },
+    { "text": "Your keyboard is not being changed.", "class": "Static", "x": 41, "y": 128, "w": 400, "h": 15 },
+    { "text": "Enable Keyboard Fix", "class": "Button", "x": 41, "y": 153, "w": 400, "h": 54 },
+    { "text": "Quick switch from anywhere, even inside a game:  Ctrl + Shift + F12", "class": "Static", "x": 41, "y": 213, "w": 400, "h": 15 },
+    { "text": "Keys to fix", "class": "Button", "x": 41, "y": 240, "w": 400, "h": 78 },
+    { "text": "W A S D and the arrow keys", "class": "Button", "x": 55, "y": 264, "w": 370, "h": 17 },
+    { "text": "Windows key and Alt key", "class": "Button", "x": 55, "y": 289, "w": 370, "h": 17 },
+    { "text": "Starting up", "class": "Button", "x": 41, "y": 328, "w": 400, "h": 78 },
+    { "text": "Start automatically with Windows", "class": "Button", "x": 55, "y": 352, "w": 370, "h": 17 },
+    { "text": "Turn the fix on as soon as this app starts", "class": "Button", "x": 55, "y": 377, "w": 370, "h": 17 },
+    { "text": "Keyboard test", "class": "Button", "x": 41, "y": 416, "w": 400, "h": 172 },
+    { "text": "Press a key. The box that lights up should match the label printed on that key.", "class": "Static", "x": 55, "y": 440, "w": 372, "h": 30 },
+    { "text": "W", "class": "Static", "x": 99, "y": 478, "w": 40, "h": 34 },
+    { "text": "A", "class": "Static", "x": 55, "y": 516, "w": 40, "h": 34 },
+    { "text": "S", "class": "Static", "x": 99, "y": 516, "w": 40, "h": 34 },
+    { "text": "D", "class": "Static", "x": 143, "y": 516, "w": 40, "h": 34 },
+    { "text": "↑", "class": "Static", "x": 249, "y": 478, "w": 40, "h": 34 },
+    { "text": "←", "class": "Static", "x": 205, "y": 516, "w": 40, "h": 34 },
+    { "text": "↓", "class": "Static", "x": 249, "y": 516, "w": 40, "h": 34 },
+    { "text": "→", "class": "Static", "x": 293, "y": 516, "w": 40, "h": 34 },
+    { "text": "Win", "class": "Static", "x": 345, "y": 516, "w": 40, "h": 34 },
+    { "text": "Alt", "class": "Static", "x": 387, "y": 516, "w": 40, "h": 34 },
+    { "text": "Windows received:  (press a key)", "class": "Static", "x": 55, "y": 560, "w": 372, "h": 15 },
+    { "text": "Hide to Tray", "class": "Button", "x": 41, "y": 602, "w": 150, "h": 32 },
+    { "text": "Exit", "class": "Button", "x": 291, "y": 602, "w": 150, "h": 32 }
+  ]
+}
+

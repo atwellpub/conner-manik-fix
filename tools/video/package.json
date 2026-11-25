@@ -1,0 +1,12 @@
+{
+  "name": "manik-keyboard-fix-install-video",
+  "private": true,
+  "description": "Renders docs/install-guide.mp4 from storyboard.html and the pictures in shots/.",
+  "type": "module",
+  "scripts": {
+    "render": "node render.mjs"
+  },
+  "dependencies": {
+    "playwright-core": "1.65.1"
+  }
+}

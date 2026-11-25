@@ -256,3 +256,7 @@ download links at the top of this page keep working.
 
 [TESTING.md](TESTING.md) lists what the automated tests cover, and has the manual checklist for the
 things only a person at the real keyboard can confirm.
+
+## Contributors
+
+- [cjcas24-boop](https://github.com/cjcas24-boop)

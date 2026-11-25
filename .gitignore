@@ -1,0 +1,10 @@
+# Local working directories (never committed)
+.data/
+.product/
+.snapshots/
+
+# Downloaded build toolchain (AutoHotkey + Ahk2Exe), fetched by build.ps1
+.build-tools/
+
+# Test run output
+tests/out/

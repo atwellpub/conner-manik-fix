@@ -118,6 +118,11 @@ Because there is no window to look at inside a game, it answers with a sound: tw
 
 ## Troubleshooting
 
+**"This installation package could not be opened."** The MSI is being opened from a network drive
+or a WSL folder (a path such as `X:\...` or `\\wsl.localhost\...`). Windows Installer cannot read a
+package from there. Copy the file to the Desktop or the Downloads folder and double-click that copy,
+or download it again from the [latest release](https://github.com/atwellpub/conner-manik-fix/releases/latest).
+
 **The keys are still wrong.** Open the window and check that the banner is green. If it says ON with
 "nothing ticked", tick a box under **Keys to fix**. Then try the keys in the **Keyboard test** area.
 
@@ -216,7 +221,8 @@ Use `-SkipMsi` to build only the exe.
 The project folder can be on a WSL drive (for example `X:\home\...` or `\\wsl.localhost\...`). Windows
 treats that as a network drive, where the installer tools and Windows' own `.ini` functions do not
 work, so the MSI step and the tests do that part of their work in the Windows temp folder and clean
-up after themselves.
+up after themselves. For the same reason, the MSI in `dist\` cannot be installed by double-clicking
+it there. Copy it to a local folder first.
 
 To release a new version, change `APP_VERSION` and the `;@Ahk2Exe-SetVersion` line in
 `src\MANIK-Keyboard-Fix.ahk` together. The build stops if they disagree. The installer replaces an
